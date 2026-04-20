@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La machine à verbes - PER (Suisse romande)</title>
+    <script crossorigin src="https://unpkg.com/react@18.3.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.3.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.1); }
+            75% { transform: rotate(10deg) scale(1.1); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        .fullscreen-bg {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Pronoms séparés
+        const standardPronouns = [
+            { label: 'Je / J\'' }, { label: 'Tu' },
+            { label: 'Il' }, { label: 'Elle' }, { label: 'On' },
+            { label: 'Nous' }, { label: 'Vous' }, 
+            { label: 'Ils' }, { label: 'Elles' }
+        ];
+
+        // Configurations PER
+        const presets = {
+            '5p': {
+                verbs: [
+                    { infinitive: 'être' }, { infinitive: 'avoir' }, { infinitive: 'aller' },
+                    { infinitive: 'chanter' }, { infinitive: 'finir' }, { infinitive: 'dire' },
+                    { infinitive: 'faire' }, { infinitive: 'entendre' }, { infinitive: 'savoir' },
+                    { infinitive: 'vouloir' }
+                ],
+                tenses: [
+                    { name: 'Présent' }, { name: 'Imparfait' }
+                ],
+                pronouns: standardPronouns
+            },
+            '6p': {
+                verbs: [
+                    { infinitive: 'être' }, { infinitive: 'avoir' }, { infinitive: 'aller' },
+                    { infinitive: 'aimer' }, { infinitive: 'finir' }, { infinitive: 'dire' },
+                    { infinitive: 'faire' }, { infinitive: 'rendre' }, { infinitive: 'savoir' },
+                    { infinitive: 'vouloir' }, { infinitive: 'manger' }, { infinitive: 'commencer' },
+                    { infinitive: 'mettre' }, { infinitive: 'pouvoir' }, { infinitive: 'oublier' },
+                    { infinitive: 'prendre' }, { infinitive: 'sortir' }, { infinitive: 'courir' },
+                    { infinitive: 'voir' }, { infinitive: 'venir' }
+                ],
+                tenses: [
+                    { name: 'Présent' }, { name: 'Imparfait' },
+                    { name: 'Futur' }, { name: 'Passé composé' }
+                ],
+                pronouns: standardPronouns
+            },
+            '7p': {
+                verbs: [
+                    { infinitive: 'être' }, { infinitive: 'avoir' }, { infinitive: 'aller' },
+                    { infinitive: 'chanter' }, { infinitive: 'finir' }, { infinitive: 'dire' },
+                    { infinitive: 'faire' }, { infinitive: 'entendre' }, { infinitive: 'savoir' },
+                    { infinitive: 'vouloir' }, { infinitive: 'manger' }, { infinitive: 'commencer' },
+                    { infinitive: 'mettre' }, { infinitive: 'pouvoir' }, { infinitive: 'oublier' },
+                    { infinitive: 'prendre' }, { infinitive: 'sortir' }, { infinitive: 'courir' },
+                    { infinitive: 'voir' }, { infinitive: 'venir' }, { infinitive: 'employer' },
+                    { infinitive: 'payer' }, { infinitive: 'acheter' }, { infinitive: 'peler' }
+                ],
+                tenses: [
+                    { name: 'Présent' }, { name: 'Imparfait' },
+                    { name: 'Futur' }, { name: 'Passé composé' },
+                    { name: 'Conditionnel présent' }, { name: 'Impératif' }
+                ],
+                pronouns: standardPronouns
+            },
+            '8p': {
+                verbs: [
+                    { infinitive: 'être' }, { infinitive: 'avoir' }, { infinitive: 'aller' },
+                    { infinitive: 'aimer' }, { infinitive: 'finir' }, { infinitive: 'dire' },
+                    { infinitive: 'faire' }, { infinitive: 'rendre' }, { infinitive: 'savoir' },
+                    { infinitive: 'vouloir' }, { infinitive: 'manger' }, { infinitive: 'commencer' },
+                    { infinitive: 'mettre' }, { infinitive: 'pouvoir' }, { infinitive: 'oublier' },
+                    { infinitive: 'prendre' }, { infinitive: 'sortir' }, { infinitive: 'courir' },
+                    { infinitive: 'voir' }, { infinitive: 'venir' }, { infinitive: 'employer' },
+                    { infinitive: 'payer' }, { infinitive: 'acheter' }, { infinitive: 'peler' },
+                    { infinitive: 'appeler' }, { infinitive: 'jeter' }, { infinitive: 'craindre' },
+                    { infinitive: 'plaire' }, { infinitive: 'fuir' }, { infinitive: 'valoir' },
+                    { infinitive: 'falloir' }, { infinitive: 'boire' }, { infinitive: 'ouvrir' },
+                    { infinitive: 'vivre' }
+                ],
+                tenses: [
+                    { name: 'Présent' }, { name: 'Imparfait' },
+                    { name: 'Futur' }, { name: 'Passé composé' },
+                    { name: 'Conditionnel présent' }, { name: 'Impératif' },
+                    { name: 'Plus-que-parfait' }, { name: 'Futur antérieur' },
+                    { name: 'Passé simple' }
+                ],
+                pronouns: standardPronouns
+            }
+        };
+
+        const defaultData = presets['5p'];
+
+        function useLocalStorage(key, initialValue) {
+            const [storedValue, setStoredValue] = React.useState(() => {
+                try {
+                    const item = window.localStorage.getItem(key);
+                    return item ? JSON.parse(item) : initialValue;
+                } catch (error) {
+                    return initialValue;
+                }
+            });
+
+            React.useEffect(() => {
+                try {
+                    window.localStorage.setItem(key, JSON.stringify(storedValue));
+                } catch (error) {}
+            }, [key, storedValue]);
+
+            return [storedValue, setStoredValue];
+        }
+
+        function DrawCard({ label, selectedItem, onDraw, backgroundColor }) {
+            return (
+                <div className="flex flex-col items-center gap-4 w-full">
+                    <h3 className="text-3xl font-bold text-gray-700 uppercase tracking-wider">{label}</h3>
+                    <div className={`w-full aspect-square rounded-3xl shadow-xl ${backgroundColor} p-6 relative overflow-hidden transform transition hover:scale-105 cursor-pointer`} onClick={onDraw}>
+                        {selectedItem ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <p className="text-5xl md:text-6xl font-black text-white text-center break-words drop-shadow-md">
+                                    {selectedItem}
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <p className="text-2xl text-white text-center opacity-70 font-medium">
+                                    Clique ici !
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function EditModal({ items, displayKey, onClose, onSave, label }) {
+            const [editedItems, setEditedItems] = React.useState([...items]);
+            const addItem = () => setEditedItems([...editedItems, { [displayKey]: '' }]);
+            const removeItem = (index) => setEditedItems(editedItems.filter((_, i) => i !== index));
+            const updateItem = (index, value) => {
+                const newItems = [...editedItems];
+                newItems[index] = { ...newItems[index], [displayKey]: value };
+                setEditedItems(newItems);
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-2xl font-bold text-gray-800">Modifier {label}</h3>
+                            <button onClick={onClose} className="text-gray-400 hover:text-red-500 text-3xl font-bold transition">&times;</button>
+                        </div>
+                        <div className="space-y-3">
+                            {editedItems.map((item, index) => (
+                                <div key={index} className="flex gap-3">
+                                    <input type="text" value={item[displayKey]} onChange={(e) => updateItem(index, e.target.value)} className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2 text-lg focus:border-blue-500 focus:outline-none transition" />
+                                    <button onClick={() => removeItem(index)} className="bg-red-100 text-red-600 px-4 rounded-lg hover:bg-red-200 transition font-bold">X</button>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mt-4">
+                            <button onClick={addItem} className="w-full py-3 border-2 border-dashed border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 font-bold transition">
+                                + Ajouter un élément
+                            </button>
+                        </div>
+                        <div className="mt-8 flex justify-end gap-3">
+                            <button onClick={onClose} className="px-6 py-3 text-gray-600 font-bold hover:bg-gray-100 rounded-lg transition">Annuler</button>
+                            <button onClick={() => onSave(editedItems)} className="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow-md transition">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [items, setItems] = useLocalStorage('conjugationItems_PER_v2', defaultData);
+            const [selectedVerb, setSelectedVerb] = React.useState(null);
+            const [selectedTense, setSelectedTense] = React.useState(null);
+            const [selectedPronoun, setSelectedPronoun] = React.useState(null);
+            const [editingType, setEditingType] = React.useState(null);
+            const [isShaking, setIsShaking] = React.useState(false);
+            const [showMenu, setShowMenu] = React.useState(false);
+            const [showHistory, setShowHistory] = React.useState(false);
+            
+            const [history, setHistory] = React.useState([]);
+            const [time, setTime] = React.useState(0);
+            const [timerActive, setTimerActive] = React.useState(false);
+
+            React.useEffect(() => {
+                let interval = null;
+                if (timerActive && time > 0) {
+                    interval = setInterval(() => setTime(time => time - 1), 1000);
+                } else if (time === 0) {
+                    setTimerActive(false);
+                    clearInterval(interval);
+                }
+                return () => clearInterval(interval);
+            }, [timerActive, time]);
+
+            const formatTime = (seconds) => {
+                const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const s = (seconds % 60).toString().padStart(2, '0');
+                return `${m}:${s}`;
+            };
+
+            const drawRandom = (array) => array[Math.floor(Math.random() * array.length)];
+
+            const drawAll = () => {
+                if(items.pronouns.length === 0 || items.verbs.length === 0 || items.tenses.length === 0) return alert("Attention: Vos listes sont vides !");
+                
+                // Vérifier si toutes les combinaisons possibles ont été faites
+                const maxCombinations = items.pronouns.length * items.verbs.length * items.tenses.length;
+                if (history.length >= maxCombinations) {
+                    alert("Toutes les combinaisons possibles ont été tirées ! Videz l'historique pour recommencer un cycle.");
+                    return;
+                }
+
+                setIsShaking(true);
+                let ticks = 0;
+                
+                const interval = setInterval(() => {
+                    // Animation visuelle
+                    setSelectedPronoun(drawRandom(items.pronouns));
+                    setSelectedVerb(drawRandom(items.verbs));
+                    setSelectedTense(drawRandom(items.tenses));
+                    ticks++;
+                    
+                    if (ticks > 10) {
+                        clearInterval(interval);
+                        setIsShaking(false);
+                        
+                        // Chercher une combinaison unique qui n'est pas dans l'historique
+                        let isDuplicate = true;
+                        let finalP, finalV, finalT;
+                        
+                        while(isDuplicate) {
+                            finalP = drawRandom(items.pronouns);
+                            finalV = drawRandom(items.verbs);
+                            finalT = drawRandom(items.tenses);
+                            
+                            isDuplicate = history.some(item => 
+                                item.pronoun === finalP.label && 
+                                item.verb === finalV.infinitive && 
+                                item.tense === finalT.name
+                            );
+                        }
+                        
+                        // Appliquer la combinaison unique
+                        setSelectedPronoun(finalP);
+                        setSelectedVerb(finalV);
+                        setSelectedTense(finalT);
+
+                        // Ajouter à l'historique (à la fin du tableau pour ordre croissant)
+                        setHistory(prev => [...prev, {
+                            id: Date.now(),
+                            pronoun: finalP.label,
+                            verb: finalV.infinitive,
+                            tense: finalT.name
+                        }]);
+                    }
+                }, 50);
+            };
+
+            const toggleFullScreen = () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => console.log(err));
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            };
+
+            const loadPreset = (presetName) => {
+                if(confirm(`Remplacer les listes actuelles par celles du niveau ${presetName.toUpperCase()} ? L'historique sera vidé.`)) {
+                    setItems(presets[presetName]);
+                    setHistory([]); // On vide l'historique si on change de niveau
+                    setShowMenu(false);
+                }
+            };
+
+            const getModalProps = () => {
+                switch (editingType) {
+                    case 'verbs': return { items: items.verbs, displayKey: 'infinitive', label: 'Verbes', onSave: (n) => { setItems({ ...items, verbs: n }); setHistory([]); setEditingType(null); } };
+                    case 'tenses': return { items: items.tenses, displayKey: 'name', label: 'Temps', onSave: (n) => { setItems({ ...items, tenses: n }); setHistory([]); setEditingType(null); } };
+                    case 'pronouns': return { items: items.pronouns, displayKey: 'label', label: 'Pronoms', onSave: (n) => { setItems({ ...items, pronouns: n }); setHistory([]); setEditingType(null); } };
+                    default: return null;
+                }
+            };
+
+            return (
+                <div className="fullscreen-bg bg-slate-50 flex flex-col justify-center px-4 py-8 relative">
+                    
+                    {/* Bouton Options */}
+                    <div className="absolute top-4 left-4 z-40">
+                        <button onClick={() => setShowMenu(!showMenu)} className="bg-white/80 backdrop-blur px-4 py-3 rounded-full shadow-lg text-gray-700 font-bold hover:bg-white transition">
+                            ⚙️ Options
+                        </button>
+                    </div>
+
+                    {/* Chronomètre Central */}
+                    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-40 flex items-center gap-3 bg-white/80 backdrop-blur px-6 py-2 rounded-full shadow-lg">
+                        <span className={`text-2xl font-mono font-bold ${time <= 10 && time > 0 ? 'text-red-600 animate-pulse' : 'text-gray-800'}`}>
+                            ⏱ {formatTime(time)}
+                        </span>
+                        <div className="flex gap-1 ml-4 border-l pl-4 border-gray-300">
+                            <button onClick={() => setTime(t => t + 10)} className="px-2 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded font-medium">+10s</button>
+                            <button onClick={() => setTime(t => t + 60)} className="px-2 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded font-medium">+1m</button>
+                            <button onClick={() => setTimerActive(!timerActive)} className={`px-3 py-1 text-sm text-white rounded font-bold ${timerActive ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-500 hover:bg-green-600'}`}>
+                                {timerActive ? 'Pause' : 'Start'}
+                            </button>
+                            <button onClick={() => {setTime(0); setTimerActive(false);}} className="px-2 py-1 text-sm bg-red-100 text-red-600 hover:bg-red-200 rounded font-medium">Stop</button>
+                        </div>
+                    </div>
+
+                    {/* Boutons Droite : Historique et Plein Ecran */}
+                    <div className="absolute top-4 right-4 z-40 flex gap-3">
+                        <button onClick={() => setShowHistory(true)} className="bg-white/80 backdrop-blur px-4 py-3 rounded-full shadow-lg text-gray-700 font-bold hover:bg-white transition flex items-center gap-2">
+                            <span>📜 Historique</span>
+                            {history.length > 0 && <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">{history.length}</span>}
+                        </button>
+                        <button onClick={toggleFullScreen} className="bg-white/80 backdrop-blur px-4 py-3 rounded-full shadow-lg text-gray-700 font-bold hover:bg-white transition">
+                            📺 Plein écran
+                        </button>
+                    </div>
+
+                    {/* Menu Options */}
+                    {showMenu && (
+                        <div className="absolute top-20 left-4 z-40 bg-white p-6 rounded-2xl shadow-2xl border border-gray-100 w-80">
+                            <h4 className="font-bold text-gray-800 mb-4 border-b pb-2">Modifier les listes</h4>
+                            <div className="flex flex-col gap-2 mb-6">
+                                <button onClick={() => setEditingType('pronouns')} className="text-left px-4 py-2 hover:bg-blue-50 rounded text-blue-700">Editer les pronoms</button>
+                                <button onClick={() => setEditingType('verbs')} className="text-left px-4 py-2 hover:bg-green-50 rounded text-green-700">Editer les verbes</button>
+                                <button onClick={() => setEditingType('tenses')} className="text-left px-4 py-2 hover:bg-orange-50 rounded text-orange-700">Editer les temps</button>
+                            </div>
+                            <h4 className="font-bold text-gray-800 mb-4 border-b pb-2">Niveaux PER</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                <button onClick={() => loadPreset('5p')} className="bg-gray-100 hover:bg-gray-200 py-2 rounded text-sm font-bold">5P</button>
+                                <button onClick={() => loadPreset('6p')} className="bg-gray-100 hover:bg-gray-200 py-2 rounded text-sm font-bold">6P</button>
+                                <button onClick={() => loadPreset('7p')} className="bg-gray-100 hover:bg-gray-200 py-2 rounded text-sm font-bold">7P</button>
+                                <button onClick={() => loadPreset('8p')} className="bg-gray-100 hover:bg-gray-200 py-2 rounded text-sm font-bold">8P</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Modal Historique */}
+                    {showHistory && (
+                        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
+                            <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-3xl font-bold text-gray-800">📜 Historique de la session</h3>
+                                    <button onClick={() => setShowHistory(false)} className="text-gray-400 hover:text-red-500 text-4xl font-bold transition">&times;</button>
+                                </div>
+                                {history.length === 0 ? (
+                                    <p className="text-gray-500 italic text-center py-8 text-xl">Aucun tirage pour le moment. Lancez les dés !</p>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {history.map((item, idx) => (
+                                            <div key={item.id} className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-200 text-2xl">
+                                                <span className="font-bold text-gray-400 w-12">{idx + 1}.</span>
+                                                <span className="font-bold text-blue-600 w-1/4">{item.pronoun}</span>
+                                                <span className="font-bold text-emerald-600 w-1/3 text-center">{item.verb}</span>
+                                                <span className="font-bold text-orange-500 w-1/3 text-right">{item.tense}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                <div className="mt-8 flex justify-between gap-3">
+                                    <button onClick={() => {if(confirm("Vider tout l'historique ?")) setHistory([])}} className="px-6 py-3 text-red-600 font-bold hover:bg-red-50 rounded-lg transition border border-red-200">Vider la liste</button>
+                                    <button onClick={() => setShowHistory(false)} className="px-8 py-3 bg-gray-800 text-white font-bold rounded-lg hover:bg-gray-900 shadow-md transition">Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="max-w-6xl mx-auto w-full mt-12">
+                        <header className="text-center mb-16">
+                            <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-rose-500 to-orange-500 mb-4 drop-shadow-sm">
+                                LA MACHINE À VERBES
+                            </h1>
+                            <p className="text-2xl md:text-3xl font-medium text-gray-500">
+                                À vos cahiers !
+                            </p>
+                        </header>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 px-4">
+                            <DrawCard label="Pronom" selectedItem={selectedPronoun?.label} onDraw={() => setSelectedPronoun(drawRandom(items.pronouns))} backgroundColor="bg-gradient-to-br from-blue-400 to-blue-600" />
+                            <DrawCard label="Verbe" selectedItem={selectedVerb?.infinitive} onDraw={() => setSelectedVerb(drawRandom(items.verbs))} backgroundColor="bg-gradient-to-br from-emerald-400 to-emerald-600" />
+                            <DrawCard label="Temps" selectedItem={selectedTense?.name} onDraw={() => setSelectedTense(drawRandom(items.tenses))} backgroundColor="bg-gradient-to-br from-amber-400 to-orange-500" />
+                        </div>
+
+                        <div className="flex justify-center mt-16 pb-12">
+                            <button onClick={drawAll} className={`bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-6xl md:text-7xl w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all flex items-center justify-center ${isShaking ? 'shake' : ''}`} title="Tirer les 3 au sort !">
+                                🎲
+                            </button>
+                        </div>
+
+                        {getModalProps() && <EditModal {...getModalProps()} onClose={() => setEditingType(null)} />}
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
